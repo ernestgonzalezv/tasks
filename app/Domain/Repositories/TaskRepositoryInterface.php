@@ -8,5 +8,5 @@ interface TaskRepositoryInterface
 {
     public function getAll(): array;
     public function store(Task $task): Task;
-    public function toggleStatus(int $id): Task;
+    public function toggleStatus(int $id): ?Task;
 }

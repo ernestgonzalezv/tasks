@@ -2,8 +2,10 @@
 
 namespace App\Application\UseCases\Tasks;
 
+use App\Application\UseCases\UseCaseResponse;
 use App\Domain\Repositories\TaskRepositoryInterface;
-use App\Domain\Entities\Task;
+use App\Http\Responses\TaskResponse;
+use Exception;
 
 class ToggleTaskStatusUseCase
 {
@@ -14,8 +16,19 @@ class ToggleTaskStatusUseCase
         $this->taskRepository = $taskRepository;
     }
 
-    public function execute(int $id): Task
+    public function execute(int $id): UseCaseResponse
     {
-        return $this->taskRepository->toggleStatus($id);
+        try {
+            $updated = $this->taskRepository->toggleStatus($id);
+
+            if (!$updated) {
+                return UseCaseResponse::error('Task not found', 404);
+            }
+
+            $dto = TaskResponse::fromDomainTask($updated);
+            return UseCaseResponse::success($dto);
+        } catch (Exception $e) {
+            return UseCaseResponse::error('An unexpected error occurred', 500);
+        }
     }
 }
