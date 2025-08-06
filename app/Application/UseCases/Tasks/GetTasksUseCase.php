@@ -19,8 +19,8 @@ class GetTasksUseCase
     {
         try {
             $tasks = $this->taskRepository->getAll();
-            $dtos = array_map(fn($task) => \App\Http\Responses\TaskResponse::fromDomainTask($task), $tasks);
-            return UseCaseResponse::success($dtos, 200);
+            $dataTransferObjects = array_map(fn($task) => \App\Http\Responses\TaskResponse::fromDomainTask($task), $tasks);
+            return UseCaseResponse::success($dataTransferObjects, 200);
         } catch (Exception $e) {
             return UseCaseResponse::error('Failed to retrieve tasks', 500);
         }
