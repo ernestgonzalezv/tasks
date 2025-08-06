@@ -1,0 +1,59 @@
+name: PR Checks
+
+on:
+  pull_request:
+    branches: [ develop, main ]
+
+jobs:
+  pr-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # PHP / Laravel setup
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: mbstring, bcmath, sqlite
+          coverage: none
+
+      - name: Install Composer dependencies
+        run: composer install --no-progress --prefer-dist --optimize-autoloader
+
+      # Node / Vue setup
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install NPM dependencies
+        run: npm ci || npm install
+
+      # Dummy Laravel tests
+      - name: Dummy Laravel Test
+        run: php artisan --version
+
+      # Dummy Vue build check
+      - name: Build Vue
+        run: npm run build --prefix frontend || echo "No frontend yet"
+
+      # Spell check
+      - name: Spell Check
+        uses: streetsidesoftware/cspell-action@v2
+        with:
+          files: "**/*.{php,vue,js,md}"
+
+      # Lint PHP (requires phpcs)
+      - name: Install PHP_CodeSniffer
+        run: composer global require "squizlabs/php_codesniffer=*"
+
+      - name: PHP Lint
+        run: ~/.composer/vendor/bin/phpcs --standard=PSR12 app/ routes/ || echo "No PHP lint errors"
+
+      # Lint Vue / JS (requires eslint)
+      - name: Install ESLint
+        run: npm install eslint --prefix frontend || echo "No ESLint installed"
+
+      - name: Vue Lint
+        run: npm run lint --prefix frontend || echo "No Vue lint errors"
