@@ -2,8 +2,10 @@
 
 namespace App\Application\UseCases\Tasks;
 
+use App\Application\UseCases\UseCaseResponse;
 use App\Domain\Entities\Task;
 use App\Domain\Repositories\TaskRepositoryInterface;
+use Exception;
 
 class CreateTaskUseCase
 {
@@ -14,9 +16,15 @@ class CreateTaskUseCase
         $this->taskRepository = $taskRepository;
     }
 
-    public function execute(string $title, array $keywords): Task
+    public function execute(string $title, array $keywords, bool $isDone = false): UseCaseResponse
     {
-        $task = new Task(null, $title, false, $keywords);
-        return $this->taskRepository->store($task);
+        try {
+            $task = new Task(null, $title, $isDone, $keywords);
+            $stored = $this->taskRepository->store($task);
+
+            return UseCaseResponse::success(null, 'Task created successfully', 201);
+        } catch (Exception $e) {
+            return UseCaseResponse::error('Failed to create task', 500);
+        }
     }
 }
