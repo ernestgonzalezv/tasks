@@ -58,6 +58,9 @@ jobs:
       - name: Lint frontend
         run: cd frontend && npm run lint || echo "No lint errors"
 
+      - name: Install Spanish Dictionary
+        run: npm install -g @cspell/dict-es-es
+
       - name: Spell Check Frontend
         uses: streetsidesoftware/cspell-action@v2
         with:
