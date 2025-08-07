@@ -2,10 +2,10 @@
 
 Este repositorio contiene la solución completa para una app interna de gestión de tareas, dividida en dos carpetas principales:
 
-- `api/` → Backend en **Laravel** con arquitectura limpia (Clean Architecture) y API REST para gestión de tareas y palabras clave.
+- `api/` →  Backend en Laravel con arquitectura limpia (Clean Architecture), documentación automática con Swagger/OpenAPI, pruebas automatizadas, validaciones robustas y todo lo requerido para cumplir con las especificaciones del proyecto.
   > Consulta el README.md dentro de `api/` para detalles específicos de instalación, configuración y ejecución del backend.
 
-- `frontend/` → Frontend en **Vue 3** con Composition API y Bootstrap consumiendo la API.
+- `frontend/` → Frontend en Vue 3 con Composition API y Bootstrap, con componentes reutilizables, validaciones, consumo de API mediante Axios y todo lo necesario para una experiencia completa, incluyendo capturas de pantalla.
   > Consulta el README.md dentro de `frontend/` para instrucciones detalladas para arrancar el frontend y configuraciones específicas.
 
 ---
@@ -20,7 +20,7 @@ Este repositorio contiene la solución completa para una app interna de gestión
 Este proyecto implementa una app completa para gestión de tareas con las siguientes características clave:
 
 - **Arquitectura limpia (Clean Architecture)** que separa dominio, casos de uso, infraestructura y presentación para facilitar mantenimiento y escalabilidad.
-- Backend en **Laravel** y frontend en **Vue 3** con Composition API y diseño moderno responsivo.
+- Backend en **Laravel** Backend en Laravel con rutas RESTful, controladores organizados, validaciones, servicios desacoplados y documentación Swagger generada automáticamente para facilitar el desarrollo y consumo de la API. Frontend en **Vue 3** con Composition API y diseño moderno responsivo.
 - Gestión avanzada de tareas con estado, palabras clave, validaciones en tiempo real y UI amigable.
 - Flujo de trabajo basado en **GitFlow** para organizar ramas feature, develop y main.
 - **Pipelines CI/CD configurados para máxima calidad y automatización:**
