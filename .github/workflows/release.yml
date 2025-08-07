@@ -1,0 +1,47 @@
+name: Release Pipeline
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup Node.js (si tu backend es Node, si no quítalo)
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      # Backend tests
+      - name: Install and test API
+        working-directory: ./api
+        run: |
+          npm install
+          npm run test -- --coverage
+
+      # Backend build
+      - name: Build API
+        working-directory: ./api
+        run: npm run build
+
+      # Upload backend build
+      - name: Upload API build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-build
+          path: ./api/dist
+
+      # Frontend (solo si existe la carpeta web)
+      - name: Install and build Web (if exists)
+        if: ${{ hashFiles('web/**') != '' }}
+        run: |
+          cd web
+          npm install
+          npm run build
