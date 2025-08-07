@@ -58,11 +58,12 @@ jobs:
       - name: Lint frontend
         run: cd frontend && npm run lint || echo "No lint errors"
 
-      - name: Spell Check (Frontend)
+      - name: Spell Check Frontend
         uses: streetsidesoftware/cspell-action@v2
         with:
+          config: frontend/cspell.json
           files: |
-            frontend/src/**/*.vue
             frontend/src/**/*.js
-            frontend/src/**/*.ts
-        
+            frontend/src/**/*.vue
+            frontend/src/**/*.json
+      

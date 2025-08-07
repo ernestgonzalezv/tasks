@@ -1,0 +1,20 @@
+{
+  "version": "0.2",
+  "language": "es",
+  "dictionaries": ["es", "softwareTerms"],
+  "dictionaryDefinitions": [
+    {
+      "name": "es",
+      "path": "./.cspell-dict-es.txt",
+      "description": "Diccionario en español local"
+    }
+  ],
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/vendor/**",
+    "**/.git/**",
+    "**/*.lock"
+  ],
+  "enableFiletypes": [".php", ".js", ".ts", ".vue", ".json", ".md"],
+}
