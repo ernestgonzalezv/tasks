@@ -45,8 +45,8 @@ jobs:
         run: |
           mkdir -p coverage
           php artisan test --coverage-clover=coverage/clover.xml
-
-    
+      
+      
 
       # 📤 Subir artefacto del backend
       - name: 📤 Upload API artifact
@@ -82,12 +82,13 @@ jobs:
 
       # ──────── 🚀 RELEASE ────────
 
-      # 🏷️ Crear una release en GitHub con changelog automático
       - name: 🚀 Publish release
-        uses: softprops/action-gh-release@v2
-        with:
-          name: Release ${{ github.ref_name }}
-          tag_name: ${{ github.ref_name }}
-          generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  if: startsWith(github.ref, 'refs/tags/')
+  uses: softprops/action-gh-release@v2
+  with:
+    name: Release ${{ github.ref_name }}
+    tag_name: ${{ github.ref_name }}
+    generate_release_notes: true
+  env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
