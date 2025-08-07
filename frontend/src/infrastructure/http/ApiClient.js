@@ -16,110 +16,101 @@ export class ApiClient {
   }
 
   setupInterceptors() {
-    // Request interceptor
     this.client.interceptors.request.use(
-      (config) => {
-        console.log(`🚀 ${config.method?.toUpperCase()} ${config.url}`, config.data || 'No data')
-        return config
-      },
-      (error) => {
-        console.error('❌ Request error:', error)
-        return Promise.reject(this.handleError(error))
-      }
+        (config) => {
+          console.log(`🚀 ${config.method?.toUpperCase()} ${config.url}`, config.data || 'No data')
+          return config
+        },
+        (error) => {
+          console.error('❌ Request error:', error)
+          return Promise.reject(this.handleError(error))
+        }
     )
 
-    // Response interceptor
     this.client.interceptors.response.use(
-      (response) => {
-        console.log(`✅ ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data)
-        
-        // Validar estructura de respuesta Laravel
-        if (response.data && typeof response.data === 'object') {
-          // Si la respuesta tiene la estructura esperada de Laravel
-          if (response.data.hasOwnProperty('success')) {
-            return response
-          }
-          // Si es una respuesta directa, envolver en estructura Laravel
-          return {
-            ...response,
-            data: {
-              success: true,
-              message: null,
-              data: response.data
+        (response) => {
+          console.log(`✅ ${response.config.method?.toUpperCase()} ${response.config.url}`, response.data)
+          if (response.data && typeof response.data === 'object') {
+            if (response.data.hasOwnProperty('success')) {
+              return response
+            }
+            return {
+              ...response,
+              data: {
+                success: true,
+                message: null,
+                data: response.data
+              }
             }
           }
+
+          return response
+        },
+        (error) => {
+          console.error('❌ Response error:', error.response?.data || error.message)
+          return Promise.reject(this.handleError(error))
         }
-        
-        return response
-      },
-      (error) => {
-        console.error('❌ Response error:', error.response?.data || error.message)
-        return Promise.reject(this.handleError(error))
-      }
     )
   }
 
   handleError(error) {
-    // Error de red o timeout
+    // Network error or timeout
     if (!error.response) {
       if (error.code === 'ECONNABORTED') {
-        error.message = 'La solicitud tardó demasiado tiempo. Verifica tu conexión a internet.'
+        error.message = 'The request took too long. Please check your internet connection.'
       } else if (error.code === 'ERR_NETWORK') {
-        error.message = 'No se pudo conectar con el servidor. Verifica que la API esté ejecutándose en http://127.0.0.1:8000'
+        error.message = 'Could not connect to the server. Make sure the API is running at http://127.0.0.1:8000'
       } else {
-        error.message = 'Error de conexión. Verifica tu conexión a internet y que el servidor esté disponible.'
+        error.message = 'Connection error. Check your internet connection and that the server is available.'
       }
       return error
     }
-
-    // Errores HTTP
     const { status, data } = error.response
 
     switch (status) {
       case 400:
-        error.message = data?.message || 'Solicitud inválida. Verifica los datos enviados.'
+        error.message = data?.message || 'Bad request. Please check the submitted data.'
         break
-      
+
       case 401:
-        error.message = 'No autorizado. Verifica tus credenciales.'
+        error.message = 'Unauthorized. Please check your credentials.'
         break
-      
+
       case 403:
-        error.message = 'Acceso denegado. No tienes permisos para realizar esta acción.'
+        error.message = 'Access denied. You do not have permission to perform this action.'
         break
-      
+
       case 404:
-        error.message = data?.message || 'Recurso no encontrado.'
+        error.message = data?.message || 'Resource not found.'
         break
-      
+
       case 422:
-        // Errores de validación Laravel
         if (data?.errors && typeof data.errors === 'object') {
           const validationErrors = Object.values(data.errors).flat()
           error.message = validationErrors.join(', ')
         } else {
-          error.message = data?.message || 'Error de validación. Verifica los datos enviados.'
+          error.message = data?.message || 'Validation error. Please review the submitted data.'
         }
         break
-      
+
       case 429:
-        error.message = 'Demasiadas solicitudes. Espera un momento antes de intentar nuevamente.'
+        error.message = 'Too many requests. Please wait a moment and try again.'
         break
-      
+
       case 500:
-        error.message = data?.message || 'Error interno del servidor. Contacta al administrador si el problema persiste.'
+        error.message = data?.message || 'Internal server error. Contact the administrator if the issue persists.'
         break
-      
+
       case 502:
-        error.message = 'El servidor no está disponible temporalmente. Intenta más tarde.'
+        error.message = 'The server is temporarily unavailable. Please try again later.'
         break
-      
+
       case 503:
-        error.message = 'Servicio no disponible. El servidor está en mantenimiento.'
+        error.message = 'Service unavailable. The server is under maintenance.'
         break
-      
+
       default:
-        error.message = data?.message || `Error del servidor (${status}). Contacta al administrador.`
+        error.message = data?.message || `Server error (${status}). Please contact the administrator.`
     }
 
     return error
@@ -165,7 +156,6 @@ export class ApiClient {
     }
   }
 
-  // Método para verificar conectividad
   async healthCheck() {
     try {
       const response = await this.get('/health')

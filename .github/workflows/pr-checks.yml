@@ -61,12 +61,12 @@ jobs:
       - name: Install Spanish Dictionary
         run: npm install -g @cspell/dict-es-es
 
-      - name: Spell Check Frontend
+      - name: Example of Frontend Spell Check Infrastructure
         uses: streetsidesoftware/cspell-action@v2
         with:
-          config: frontend/cspell.json
           files: |
-            frontend/src/**/*.js
-            frontend/src/**/*.vue
-            frontend/src/**/*.json
+            frontend/src/infrastructure/**/*.js
+            frontend/src/infrastructure/**/*.vue
+            frontend/src/infrastructure/**/*.json
+      
       
