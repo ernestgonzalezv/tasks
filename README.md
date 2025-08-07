@@ -47,15 +47,21 @@ Este enfoque garantiza que cada cambio pase por estrictos controles de calidad y
 
 ```plaintext
 /
-├── api/                 # Backend Laravel
-│   ├── Application/     # Casos de uso (UseCases)
-│   ├── Domain/          # Entidades y contratos
-│   ├── Http/            # Controladores, Requests, Responses
-│   ├── Infrastructure/  # Repositorios Eloquent y adaptadores
-│   ├── Models/          # Modelos Eloquent
-│   └── Providers/       # Providers Laravel
+├── api/                     # Backend Laravel
+│   ├── app/
+│   │   ├── Application/     # Casos de uso (UseCases)
+│   │   ├── Domain/          # Entidades y contratos
+│   │   ├── Http/            # Controladores, Requests, Responses
+│   │   ├── Infrastructure/  # Repositorios Eloquent y adaptadores
+│   │   ├── Models/          # Modelos Eloquent (si no se colocan en Domain)
+│   │   └── Providers/       # Providers Laravel
+│   ├── routes/              # Definición de rutas API y web
+│   ├── database/            # Migraciones, seeders, factories
+│   ├── config/              # Archivos de configuración
+│   ├── tests/               # Pruebas unitarias y de integración
+│   └── ...
 │
-├── frontend/            # Frontend Vue 3 + Bootstrap
+├── frontend/                # Frontend Vue 3 + Bootstrap
 │   ├── src/
 │   │   ├── components/       # Componentes UI (TaskList.vue, etc.)
 │   │   ├── composables/      # Lógica reusable (API, validaciones)
@@ -67,8 +73,8 @@ Este enfoque garantiza que cada cambio pase por estrictos controles de calidad y
 │   │   └── utils/            # Utilidades y validadores
 │   └── public/
 │
-├── screenshots/          # Capturas de pantalla para README
-├── README.md             # Archivo principal de documentación
+├── screenshots/             # Capturas de pantalla para README
+├── README.md                # Archivo principal de documentación
 └── ...
 ````
 
