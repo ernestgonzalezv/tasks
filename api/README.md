@@ -1,4 +1,3 @@
-````markdown
 # 🗂️ Tasks API – Backend (Laravel + Clean Architecture)
 
 Este proyecto es una API desarrollada en **Laravel** siguiendo principios de **Clean Architecture**.  

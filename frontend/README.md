@@ -1,4 +1,3 @@
-````markdown
 # 🗂️ Tasks Frontend – Vue 3 + Composition API + Bootstrap
 
 Este proyecto es el **frontend** de una aplicación de gestión de tareas, desarrollado en **Vue 3** usando `<script setup>` y Composition API.  
