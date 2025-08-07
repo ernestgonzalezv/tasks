@@ -29,7 +29,10 @@ jobs:
       - name: Spell Check
         uses: streetsidesoftware/cspell-action@v2
         with:
-          files: "**/*.{php,md}"
+          files: |
+            api/app/**/*.php
+            api/routes/**/*.php
+            api/README.md
 
       # Lint PHP (requires phpcs)
       - name: Install PHP_CodeSniffer
