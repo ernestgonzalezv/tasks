@@ -18,8 +18,10 @@ jobs:
           extensions: mbstring, bcmath, sqlite
           coverage: none
 
-      - name: Install Composer dependencies
-        run: composer install --no-progress --prefer-dist --optimize-autoloader
+      - name: Install PHP dependencies
+        run: |
+          cd api
+          composer install --no-progress --prefer-dist --optimize-autoloader
 
       # Node / Vue setup
       - name: Setup Node.js
@@ -28,15 +30,21 @@ jobs:
           node-version: 20
 
       - name: Install NPM dependencies
-        run: npm ci || npm install
+        run: |
+          cd frontend
+          npm ci || npm install
 
-      # Dummy Laravel tests
-      - name: Dummy Laravel Test
-        run: php artisan --version
+      # Dummy Laravel test (placeholder)
+      - name: Laravel Version Test
+        run: |
+          cd api
+          php artisan --version
 
       # Dummy Vue build check
       - name: Build Vue
-        run: npm run build --prefix frontend || echo "No frontend yet"
+        run: |
+          cd frontend
+          npm run build || echo "No frontend yet"
 
       # Spell check
       - name: Spell Check
@@ -44,16 +52,22 @@ jobs:
         with:
           files: "**/*.{php,vue,js,md}"
 
-      # Lint PHP (requires phpcs)
+      # Lint PHP
       - name: Install PHP_CodeSniffer
-        run: composer global require "squizlabs/php_codesniffer=*"
+        run: |
+          composer global require "squizlabs/php_codesniffer=*"
 
       - name: PHP Lint
-        run: ~/.composer/vendor/bin/phpcs --standard=PSR12 app/ routes/ || echo "No PHP lint errors"
+        run: |
+          ~/.composer/vendor/bin/phpcs --standard=PSR12 api/app/ api/routes/ || echo "No PHP lint errors"
 
-      # Lint Vue / JS (requires eslint)
+      # Lint Vue / JS
       - name: Install ESLint
-        run: npm install eslint --prefix frontend || echo "No ESLint installed"
+        run: |
+          cd frontend
+          npm install eslint || echo "No ESLint installed"
 
       - name: Vue Lint
-        run: npm run lint --prefix frontend || echo "No Vue lint errors"
+        run: |
+          cd frontend
+          npm run lint || echo "No Vue lint errors"
