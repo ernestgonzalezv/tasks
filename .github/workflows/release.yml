@@ -1,4 +1,4 @@
-name: Release Pipeline
+name: 🚀 Release Pipeline
 
 on:
   push:
@@ -6,42 +6,86 @@ on:
       - main
 
 jobs:
-  test-and-build:
+  release:
+    name: Test + Build + Release
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      # 🔄 Checkout del repositorio
+      - name: ⬇️ Checkout repo
         uses: actions/checkout@v4
 
-      # Setup Node.js (si tu backend es Node, si no quítalo)
-      - name: Setup Node.js
+      # ──────── 🔧 BACKEND: Laravel API (./api) ────────
+
+      # 🛠️ Setup PHP para Laravel
+      - name: 🛠️ Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          extensions: mbstring, pdo, mysql, xdebug
+          tools: composer
+
+      # 📦 Instalar dependencias de Laravel
+      - name: 📦 Install Composer dependencies
+        working-directory: ./api
+        run: composer install --no-progress --no-interaction
+
+      # ⚙️ Configurar Laravel (.env + app key)
+      - name: ⚙️ Set Laravel .env
+        working-directory: ./api
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      # 🧪 Tests + Coverage Laravel
+      - name: 🧪 Run Laravel tests with Coverage
+        working-directory: ./api
+        run: |
+          mkdir -p coverage
+          php artisan test --coverage-clover=coverage/clover.xml
+
+    
+
+      # 📤 Subir artefacto del backend
+      - name: 📤 Upload API artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: api-artifact
+          path: ./api/
+
+      # ──────── 🖥️ FRONTEND: Cliente (./frontend) ────────
+
+      # 🛠️ Setup Node.js
+      - name: 🛠️ Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Backend tests
-      - name: Install and test API
-        working-directory: ./api
-        run: |
-          npm install
-          npm run test -- --coverage
+      # 📦 Instalar dependencias del frontend
+      - name: 📦 Install frontend deps
+        working-directory: ./frontend
+        run: npm install
 
-      # Backend build
-      - name: Build API
-        working-directory: ./api
+      # 🧱 Build frontend
+      - name: 🧱 Build frontend
+        working-directory: ./frontend
         run: npm run build
 
-      # Upload backend build
-      - name: Upload API build artifact
+      # 📤 Subir build del frontend como artefacto
+      - name: 📤 Upload frontend build
         uses: actions/upload-artifact@v4
         with:
-          name: api-build
-          path: ./api/dist
+          name: frontend-build
+          path: ./frontend/dist/
 
-      # Frontend (solo si existe la carpeta web)
-      - name: Install and build Web (if exists)
-        if: ${{ hashFiles('web/**') != '' }}
-        run: |
-          cd web
-          npm install
-          npm run build
+      # ──────── 🚀 RELEASE ────────
+
+      # 🏷️ Crear una release en GitHub con changelog automático
+      - name: 🚀 Publish release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
