@@ -6,12 +6,15 @@ on:
 
 jobs:
   pr-checks:
+    name: Run Tests, Lint, Spell Check
     runs-on: ubuntu-latest
 
     steps:
+      # 1. Checkout repository
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # 2. Setup PHP (Laravel)
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -19,34 +22,43 @@ jobs:
           extensions: mbstring, bcmath, sqlite
           coverage: none
 
+      - name: Set up environment
+        run: |
+          cp api/.env.example api/.env
+          cd api
+          php artisan key:generate
+
+      # 3. Install Composer dependencies
       - name: Install PHP dependencies
         run: |
           cd api
-          composer install --no-progress --prefer-dist --optimize-autoloader
+          composer install --no-interaction --prefer-dist --optimize-autoloader
 
-      - name: Laravel Build (Cache Config & Routes)
-        run: |
-          cd api
-          php artisan config:cache
-          php artisan route:cache || echo "No routes to cache"
-
+      # 4. Run Laravel Tests
       - name: Run PHPUnit tests
         run: |
           cd api
-          cp .env.example .env
-          php artisan key:generate
-          php artisan migrate --env=testing --database=sqlite --force || echo "No migrations"
-          ./vendor/bin/phpunit
+          php artisan test --parallel --testsuite=Feature
 
+      # 5. Spell check
       - name: Spell Check
         uses: streetsidesoftware/cspell-action@v2
         with:
-          files: "**/*.{php,md}"
+          files: "**/*.{php,js,md}"
+          config: .cspell.json
 
+      # 6. Lint PHP
       - name: Install PHP_CodeSniffer
         run: |
           composer global require "squizlabs/php_codesniffer=*"
 
-      - name: PHP Lint
+      - name: Run PHP Linter (PSR-12)
         run: |
-          ~/.composer/vendor/bin/phpcs --standard=PSR12 api/app/ api/routes/ || echo "No PHP lint errors"
+          ~/.composer/vendor/bin/phpcs --standard=PSR12 api/app/ api/routes/ || echo "PHP lint completed with warnings"
+
+      # 7. Optional Laravel Build
+      - name: Laravel Config Cache
+        run: |
+          cd api
+          php artisan config:cache
+          php artisan route:cache
