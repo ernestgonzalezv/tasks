@@ -32,7 +32,6 @@ jobs:
           files: |
             api/app/**/*.php
             api/routes/**/*.php
-            api/README.md
 
       # Lint PHP (requires phpcs)
       - name: Install PHP_CodeSniffer
