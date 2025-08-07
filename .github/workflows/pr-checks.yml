@@ -10,7 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # PHP / Laravel setup
+      # ------------------------
+      # 📦 BACKEND (Laravel)
+      # ------------------------
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
@@ -21,21 +24,45 @@ jobs:
       - name: Install Composer dependencies
         run: cd api && composer install --no-progress --prefer-dist --optimize-autoloader
 
-      # Dummy Laravel tests
       - name: Dummy Laravel Test
         run: cd api && php artisan --version
 
-      # Spell check
-      - name: Spell Check
+      - name: Spell Check (PHP)
         uses: streetsidesoftware/cspell-action@v2
         with:
           files: |
             api/app/**/*.php
             api/routes/**/*.php
 
-      # Lint PHP (requires phpcs)
       - name: Install PHP_CodeSniffer
         run: composer global require "squizlabs/php_codesniffer=*"
 
       - name: PHP Lint
         run: cd api && ~/.composer/vendor/bin/phpcs --standard=PSR12 app/ routes/ || echo "No PHP lint errors"
+
+      # ------------------------
+      # 🖼️ FRONTEND (Vue 3)
+      # ------------------------
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install frontend dependencies
+        run: cd frontend && npm ci
+
+      - name: Build frontend
+        run: cd frontend && npm run build
+
+      - name: Lint frontend
+        run: cd frontend && npm run lint || echo "No lint errors"
+
+      - name: Spell Check (Frontend)
+        uses: streetsidesoftware/cspell-action@v2
+        with:
+          files: |
+            frontend/src/**/*.vue
+            frontend/src/**/*.js
+            frontend/src/**/*.ts
+        

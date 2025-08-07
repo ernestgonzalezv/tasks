@@ -1,9 +1,3 @@
-Perfecto, con todo lo que compartiste, puedo armarte un **README.md profesional** para el backend que sirva de guía clara para cualquier desarrollador que necesite instalar y ejecutar tu proyecto. Incluiremos las instrucciones, dependencias, configuración `.env`, comandos y la estructura de carpetas.
-
----
-
-## Ejemplo de `README.md`
-
 ````markdown
 # 🗂️ Tasks API – Backend (Laravel + Clean Architecture)
 
