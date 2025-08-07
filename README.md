@@ -1,18 +1,17 @@
-```markdown
 # 🗂️ Tasks App — Proyecto Completo (Backend + Frontend)
 
 Este repositorio contiene la solución completa para una app interna de gestión de tareas, dividida en dos carpetas principales:
 
-- `api/` → Backend en **Laravel** con arquitectura limpia (Clean Architecture) y API REST para gestión de tareas y palabras clave.  
+- `api/` → Backend en **Laravel** con arquitectura limpia (Clean Architecture) y API REST para gestión de tareas y palabras clave.
   > Consulta el README.md dentro de `api/` para detalles específicos de instalación, configuración y ejecución del backend.
 
-- `frontend/` → Frontend en **Vue 3** con Composition API y Bootstrap consumiendo la API.  
+- `frontend/` → Frontend en **Vue 3** con Composition API y Bootstrap consumiendo la API.
   > Consulta el README.md dentro de `frontend/` para instrucciones detalladas para arrancar el frontend y configuraciones específicas.
 
 ---
 
 ![Crear tarea](./screenshots/create-task.png)  
-![Lista tareas](./screenshots/task-list.png)
+![Lista_tareas](./screenshots/task-list.png)
 
 ---
 
@@ -26,31 +25,27 @@ Este proyecto implementa una app completa para gestión de tareas con las siguie
 - Flujo de trabajo basado en **GitFlow** para organizar ramas feature, develop y main.
 - **Pipelines CI/CD configurados para máxima calidad y automatización:**
 
-  - En cada **Pull Request (PR)** se ejecutan:  
-    - **Tests automáticos** para backend y frontend.  
-    - **Builds** para validar que el código compila y funciona.  
-    - **Spell check** para detectar errores ortográficos en documentación y código.  
+  - En cada **Pull Request (PR)** se ejecutan:
+    - **Tests automáticos** para backend y frontend.
+    - **Builds** para validar que el código compila y funciona.
+    - **Spell check** para detectar errores ortográficos en documentación y código.
     - **Reglas Lint** para mantener estilo y calidad de código consistente.
 
-  - En cada **push a la rama main** se ejecutan:  
-    - Tests completos con reporte de **coverage** para asegurar alta cobertura.  
-    - **Builds de artefactos** listos para producción.  
-    - Publicación automática de releases, que puede incluir:  
-      - Distribución mediante **Firebase App Distribution**.  
-      - Deploy con **Codemagic** (para apps móviles).  
+  - En cada **push a la rama main** se ejecutan:
+    - Tests completos con reporte de **coverage** para asegurar alta cobertura.
+    - **Builds de artefactos** listos para producción.
+    - Publicación automática de releases, que puede incluir:
+      - Distribución mediante **Firebase App Distribution**.
+      - Deploy con **Codemagic** (para apps móviles).
       - Compilados y artefactos publicados directamente en GitHub Releases.
 
 Este enfoque garantiza que cada cambio pase por estrictos controles de calidad y que las releases se publiquen de forma automatizada y segura, facilitando la entrega continua.
 
 ---
 
-Claro, aquí tienes la estructura de carpetas mejor formateada para que quede más limpia y legible en Markdown:
-
-```markdown
 ## 📂 Estructura del repositorio y Clean Architecture
 
-```
-
+```plaintext
 /
 ├── api/                 # Backend Laravel
 │   ├── Application/     # Casos de uso (UseCases)
@@ -75,12 +70,7 @@ Claro, aquí tienes la estructura de carpetas mejor formateada para que quede m�
 ├── screenshots/          # Capturas de pantalla para README
 ├── README.md             # Archivo principal de documentación
 └── ...
-
-```
-```
-
-
-![Estructura Carpeta API y Frontend](./screenshots/project-structure.png)
+````
 
 ---
 
@@ -99,7 +89,7 @@ php artisan key:generate
 php artisan migrate
 
 php artisan serve
-````
+```
 
 El backend correrá en:
 `http://127.0.0.1:8000`
@@ -174,4 +164,5 @@ Este proyecto está bajo licencia MIT.
 
 ---
 
-
+```
+```
